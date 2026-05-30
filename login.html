@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="description" content="FinTrack – Acesso seguro ao sistema financeiro" />
+  <!-- Impede cache desta página -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <title>FinTrack – Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── RESET & VARS ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --bg2:      #161b22;
+      --bg3:      #1c2330;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --text2:    #8b949e;
+      --green:    #3fb950;
+      --blue:     #58a6ff;
+      --red:      #f85149;
+      --orange:   #f0883e;
+      --radius:   14px;
+      --radius-sm:8px;
+      --shadow:   0 8px 40px rgba(0,0,0,.5);
+      --font-head:"Syne", sans-serif;
+      --font-body:"DM Sans", sans-serif;
+      --tr:       0.18s ease;
+    }
+    [data-theme="light"] {
+      --bg:     #f0f4f8;
+      --bg2:    #ffffff;
+      --bg3:    #e8edf3;
+      --border: #d0d7de;
+      --text:   #1c2330;
+      --text2:  #57606a;
+      --shadow: 0 8px 40px rgba(0,0,0,.10);
+    }
+
+    html { font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── BACKGROUND DECORATIVO ─────────────────────────────────── */
+    .bg-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-glow-1 {
+      width: 500px; height: 500px;
+      background: var(--blue);
+      top: -100px; left: -100px;
+    }
+    .bg-glow-2 {
+      width: 400px; height: 400px;
+      background: var(--green);
+      bottom: -80px; right: -60px;
+    }
+
+    /* ── CARD ──────────────────────────────────────────────────── */
+    .login-card {
+      position: relative;
+      z-index: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 36px 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+      animation: cardIn .4s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(24px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── LOGO ──────────────────────────────────────────────────── */
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .logo-text-wrap .logo-name {
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+    .logo-text-wrap .logo-sub {
+      font-size: 0.7rem;
+      color: var(--text2);
+      margin-top: -2px;
+    }
+
+    /* ── HEADING ───────────────────────────────────────────────── */
+    .login-heading {
+      margin-bottom: 24px;
+    }
+    .login-heading h1 {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .login-heading p {
+      font-size: 0.82rem;
+      color: var(--text2);
+    }
+
+    /* ── FORM ──────────────────────────────────────────────────── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+      color: var(--text2);
+    }
+    .form-control {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 14px 11px 40px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--tr), box-shadow var(--tr);
+      -webkit-appearance: none;
+    }
+    .form-control:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(88,166,255,.12);
+    }
+    .form-control::placeholder { color: var(--text2); opacity: .6; }
+
+    /* toggle senha */
+    .toggle-pwd {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text2);
+      font-size: 1rem;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color var(--tr);
+      line-height: 1;
+    }
+    .toggle-pwd:hover { color: var(--text); }
+
+    /* ── BOTÃO PRINCIPAL ───────────────────────────────────────── */
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter var(--tr), transform var(--tr);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+    }
+    .btn-login:hover:not(:disabled) { filter: brightness(1.12); }
+    .btn-login:active:not(:disabled) { transform: scale(.98); }
+    .btn-login:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    /* spinner inline */
+    .btn-spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    .btn-login.loading .btn-spinner { display: block; }
+    .btn-login.loading .btn-label   { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── MENSAGEM DE ERRO ──────────────────────────────────────── */
+    .login-error {
+      background: rgba(248,81,73,.1);
+      border: 1px solid rgba(248,81,73,.3);
+      border-radius: var(--radius-sm);
+      color: var(--red);
+      font-size: 0.82rem;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .login-error.show { display: flex; }
+
+    /* ── BLOQUEIO DE TENTATIVAS ────────────────────────────────── */
+    .lockout-msg {
+      background: rgba(240,136,62,.1);
+      border: 1px solid rgba(240,136,62,.3);
+      border-radius: var(--radius-sm);
+      color: var(--orange);
+      font-size: 0.82rem;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .lockout-msg.show { display: flex; }
+
+    /* ── DIVISOR ───────────────────────────────────────────────── */
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--text2);
+      font-size: 0.75rem;
+    }
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── RODAPÉ ────────────────────────────────────────────────── */
+    .login-footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text2);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .login-footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .login-footer a:hover { text-decoration: underline; }
+
+    /* ── TEMA TOGGLE (canto) ───────────────────────────────────── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text2);
+      transition: all var(--tr);
+      z-index: 10;
+    }
+    .theme-toggle:hover { background: var(--bg3); color: var(--text); }
+
+    /* ── CAPSLOCK AVISO ────────────────────────────────────────── */
+    .caps-warning {
+      font-size: 0.72rem;
+      color: var(--orange);
+      display: none;
+      margin-top: 3px;
+    }
+    .caps-warning.show { display: block; }
+
+    /* ── ACESSIBILIDADE: foco visível ──────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 28px 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glows decorativos -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Botão tema -->
+  <button class="theme-toggle" id="theme-toggle" title="Alternar tema" aria-label="Alternar tema claro/escuro">🌙</button>
+
+  <!-- Card de Login -->
+  <div class="login-card" role="main">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="logo-icon" aria-hidden="true">💰</div>
+      <div class="logo-text-wrap">
+        <div class="logo-name">FinTrack</div>
+        <div class="logo-sub">Controle Financeiro</div>
+      </div>
+    </div>
+
+    <!-- Heading -->
+    <div class="login-heading">
+      <h1>Acesso ao sistema</h1>
+      <p>Entre com seu e-mail e senha para continuar</p>
+    </div>
+
+    <!-- Mensagem de erro -->
+    <div class="login-error" id="login-error" role="alert" aria-live="assertive">
+      <span aria-hidden="true">⚠️</span>
+      <span id="login-error-msg"></span>
+    </div>
+
+    <!-- Aviso de bloqueio -->
+    <div class="lockout-msg" id="lockout-msg" role="alert" aria-live="assertive">
+      <span aria-hidden="true">🔒</span>
+      <span id="lockout-text"></span>
+    </div>
+
+    <!-- Formulário -->
+    <form id="login-form" novalidate autocomplete="off" spellcheck="false">
+
+      <!-- E-mail -->
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">✉️</span>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="seu@email.com"
+            autocomplete="username"
+            inputmode="email"
+            maxlength="254"
+            required
+            aria-required="true"
+          />
+        </div>
+      </div>
+
+      <!-- Senha -->
+      <div class="form-group">
+        <label class="form-label" for="password">Senha</label>
+        <div class="input-wrap">
+          <span class="input-icon" aria-hidden="true">🔑</span>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            maxlength="128"
+            required
+            aria-required="true"
+          />
+          <button type="button" class="toggle-pwd" id="toggle-pwd" aria-label="Mostrar/ocultar senha">👁️</button>
+        </div>
+        <span class="caps-warning" id="caps-warning" role="status">⚠️ Caps Lock ativado</span>
+      </div>
+
+      <!-- Botão -->
+      <button type="submit" class="btn-login" id="btn-login" aria-label="Entrar no sistema">
+        <div class="btn-spinner" aria-hidden="true"></div>
+        <span class="btn-label">Entrar</span>
+      </button>
+
+    </form>
+
+    <div class="login-divider">acesso restrito</div>
+
+    <div class="login-footer">
+      <span>FinTrack v1.0 — Uso exclusivo autorizado</span>
+      <span>Todas as ações são registradas</span>
+    </div>
+  </div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    // ── CONFIGURAÇÃO ─────────────────────────────────────────────
+    const SUPABASE_URL = 'https://ptosgzkftndghhcmarhu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0b3NnemtmdG5kZ2hoY21hcmh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1NDU1MDEsImV4cCI6MjA5NDEyMTUwMX0.1Xo0QKnM9LTGI_rAgKippYwuUBOryBBYMSzpr3TmCpM';
+
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storageKey: 'fintrack-auth',
+      }
+    });
+
+    // ── RATE LIMIT — proteção contra brute force (client-side) ───
+    // Obs: o Supabase já aplica rate limit no servidor.
+    // Esta camada adicional evita flood óbvio antes de chegar na API.
+    const LOCKOUT_KEY      = 'ft_lockout';
+    const ATTEMPTS_KEY     = 'ft_attempts';
+    const MAX_ATTEMPTS     = 5;
+    const LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutos em ms
+
+    function getAttempts() {
+      try {
+        const raw = sessionStorage.getItem(ATTEMPTS_KEY);
+        return raw ? JSON.parse(raw) : { count: 0, first: null };
+      } catch { return { count: 0, first: null }; }
+    }
+    function setAttempts(data) {
+      try { sessionStorage.setItem(ATTEMPTS_KEY, JSON.stringify(data)); } catch {}
+    }
+    function clearAttempts() {
+      try { sessionStorage.removeItem(ATTEMPTS_KEY); sessionStorage.removeItem(LOCKOUT_KEY); } catch {}
+    }
+    function isLockedOut() {
+      try {
+        const lockUntil = sessionStorage.getItem(LOCKOUT_KEY);
+        if (!lockUntil) return false;
+        if (Date.now() < parseInt(lockUntil, 10)) return true;
+        clearAttempts();
+        return false;
+      } catch { return false; }
+    }
+    function registerFailedAttempt() {
+      const data = getAttempts();
+      data.count++;
+      if (!data.first) data.first = Date.now();
+      setAttempts(data);
+      if (data.count >= MAX_ATTEMPTS) {
+        const until = Date.now() + LOCKOUT_DURATION;
+        try { sessionStorage.setItem(LOCKOUT_KEY, String(until)); } catch {}
+        return { locked: true, until };
+      }
+      return { locked: false, remaining: MAX_ATTEMPTS - data.count };
+    }
+
+    // ── TEMA ──────────────────────────────────────────────────────
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved = (() => { try { return localStorage.getItem('theme'); } catch { return null; } })();
+    html.setAttribute('data-theme', saved || 'dark');
+    themeBtn.textContent = (saved || 'dark') === 'dark' ? '🌙' : '☀️';
+    themeBtn.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') !== 'light';
+      const next = isDark ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      themeBtn.textContent = next === 'dark' ? '🌙' : '☀️';
+      try { localStorage.setItem('theme', next); } catch {}
+    });
+
+    // ── SE JÁ LOGADO, REDIRECIONA ─────────────────────────────────
+    // Evita piscar a tela de login para usuários autenticados
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) {
+        window.location.replace('index.html');
+      }
+    })();
+
+    // ── REFS DOM ──────────────────────────────────────────────────
+    const form       = document.getElementById('login-form');
+    const emailEl    = document.getElementById('email');
+    const pwdEl      = document.getElementById('password');
+    const togglePwd  = document.getElementById('toggle-pwd');
+    const btnLogin   = document.getElementById('btn-login');
+    const errorBox   = document.getElementById('login-error');
+    const errorMsg   = document.getElementById('login-error-msg');
+    const lockoutBox = document.getElementById('lockout-msg');
+    const lockoutTxt = document.getElementById('lockout-text');
+    const capsWarn   = document.getElementById('caps-warning');
+
+    // ── SHOW / HIDE SENHA ─────────────────────────────────────────
+    let pwdVisible = false;
+    togglePwd.addEventListener('click', () => {
+      pwdVisible = !pwdVisible;
+      pwdEl.type = pwdVisible ? 'text' : 'password';
+      togglePwd.textContent = pwdVisible ? '🙈' : '👁️';
+      togglePwd.setAttribute('aria-label', pwdVisible ? 'Ocultar senha' : 'Mostrar senha');
+    });
+
+    // ── CAPS LOCK DETECTOR ────────────────────────────────────────
+    pwdEl.addEventListener('keyup', e => {
+      capsWarn.classList.toggle('show', e.getModifierState?.('CapsLock') ?? false);
+    });
+    pwdEl.addEventListener('blur', () => capsWarn.classList.remove('show'));
+
+    // ── ERRO / LIMPEZA ────────────────────────────────────────────
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorBox.classList.add('show');
+    }
+    function hideError() {
+      errorBox.classList.remove('show');
+    }
+    function showLockout(until) {
+      const remaining = Math.ceil((until - Date.now()) / 1000);
+      lockoutTxt.textContent = `Muitas tentativas. Aguarde ${Math.ceil(remaining / 60)} min para tentar novamente.`;
+      lockoutBox.classList.add('show');
+      btnLogin.disabled = true;
+      // Atualiza o countdown
+      const interval = setInterval(() => {
+        const rem = Math.ceil((until - Date.now()) / 1000);
+        if (rem <= 0) {
+          clearInterval(interval);
+          lockoutBox.classList.remove('show');
+          btnLogin.disabled = false;
+          clearAttempts();
+          return;
+        }
+        lockoutTxt.textContent = `Muitas tentativas. Aguarde ${rem}s para tentar novamente.`;
+      }, 1000);
+    }
+    [emailEl, pwdEl].forEach(el => el.addEventListener('input', hideError));
+
+    // ── VALIDAÇÃO CLIENT-SIDE BÁSICA ──────────────────────────────
+    function validateForm(email, password) {
+      // Regex simples de e-mail
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Informe um e-mail válido.');
+        emailEl.focus();
+        return false;
+      }
+      if (!password || password.length < 6) {
+        showError('Senha inválida.');
+        pwdEl.focus();
+        return false;
+      }
+      return true;
+    }
+
+    // ── SUBMIT ────────────────────────────────────────────────────
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      // Check lockout
+      if (isLockedOut()) {
+        const until = parseInt(sessionStorage.getItem(LOCKOUT_KEY), 10);
+        showLockout(until);
+        return;
+      }
+
+      const email    = emailEl.value.trim().toLowerCase();
+      const password = pwdEl.value;
+
+      if (!validateForm(email, password)) return;
+
+      // Loading state
+      btnLogin.classList.add('loading');
+      btnLogin.disabled = true;
+
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          const result = registerFailedAttempt();
+          if (result.locked) {
+            showLockout(result.until);
+          } else {
+            // Mensagem genérica — não revela se e-mail ou senha está errado
+            const remaining = result.remaining;
+            showError(
+              remaining <= 2
+                ? `E-mail ou senha incorretos. ${remaining} tentativa(s) restante(s) antes do bloqueio.`
+                : 'E-mail ou senha incorretos.'
+            );
+            pwdEl.value = '';
+            pwdEl.focus();
+          }
+          return;
+        }
+
+        // Sucesso — limpa tentativas e redireciona
+        clearAttempts();
+        window.location.replace('index.html');
+
+      } catch (err) {
+        showError('Erro de conexão. Tente novamente.');
+      } finally {
+        btnLogin.classList.remove('loading');
+        if (!isLockedOut()) btnLogin.disabled = false;
+      }
+    });
+
+    // Verifica lockout ao carregar
+    if (isLockedOut()) {
+      const until = parseInt(sessionStorage.getItem(LOCKOUT_KEY), 10);
+      if (until) showLockout(until);
+    }
+
+  })();
+  </script>
+</body>
+</html>
