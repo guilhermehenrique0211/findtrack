@@ -682,6 +682,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = (() => { try { return localStorage.getItem('theme'); } catch { return null; } })();
   document.documentElement.setAttribute('data-theme', savedTheme || 'dark');
 
+  // ── MENU HAMBÚRGUER (mobile) ─────────────────────────────────
+  const hamburger = $('#hamburger');
+  const sidebar    = $('.sidebar');
+  const backdrop   = $('.sidebar-backdrop');
+
+  function openSidebar() {
+    sidebar?.classList.add('open');
+    backdrop?.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar?.classList.remove('open');
+    backdrop?.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  hamburger?.addEventListener('click', () => {
+    sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  backdrop?.addEventListener('click', closeSidebar);
+
+  // Fecha ao navegar (mobile)
+  $$('.nav-item[data-page]').forEach(item =>
+    item.addEventListener('click', closeSidebar));
+
   // Registra eventos de UI (não dependem de auth)
   $$('.nav-item[data-page]').forEach(item =>
     item.addEventListener('click', () => navigate(item.dataset.page)));
