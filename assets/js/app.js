@@ -109,33 +109,57 @@ function renderChartMeses(rows) {
   if (!ctx) return;
   if (charts.meses) charts.meses.destroy();
 
-  const meses = [], emprestado = [], recebido = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(1);
-    d.setMonth(d.getMonth() - i);
-    const m = d.getMonth(), y = d.getFullYear();
-    meses.push(d.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }));
+  const anoAtual = new Date().getFullYear();
+
+  // Descobre quais meses do ano atual têm dados
+  const mesesComDados = new Set(
+    rows
+      .filter(r => r.data && r.data.startsWith(anoAtual))
+      .map(r => parseInt(r.data.slice(5, 7)) - 1) // índice 0-11
+  );
+
+  if (!mesesComDados.size) {
+    const wrap = document.getElementById('chart-meses')?.parentElement;
+    if (wrap) wrap.innerHTML = '<div class="empty-state">Sem dados para o ano atual</div>';
+    return;
+  }
+
+  const nomeMes = (m) =>
+    new Date(anoAtual, m, 1).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
+
+  const labels     = [];
+  const emprestado = [];
+  const recebido   = [];
+
+  // Janeiro (0) a Dezembro (11), só meses com dados
+  for (let m = 0; m <= 11; m++) {
+    if (!mesesComDados.has(m)) continue;
 
     const mesRows = rows.filter(r => {
       if (!r.data) return false;
-      const rd = new Date(r.data + 'T00:00:00');
-      return rd.getMonth() === m && rd.getFullYear() === y;
+      const d = new Date(r.data + 'T00:00:00');
+      return d.getFullYear() === anoAtual && d.getMonth() === m;
     });
 
-    emprestado.push(mesRows
-      .filter(r => r.tipo === 'emprestimo')
-      .reduce((s, r) => s + parseFloat(r.valor_com_juros || r.valor || 0), 0));
+    labels.push(nomeMes(m));
 
-    recebido.push(mesRows
-      .filter(r => r.tipo === 'emprestimo' && r.status === 'recebido')
-      .reduce((s, r) => s + parseFloat(r.valor_com_juros || r.valor || 0), 0));
+    emprestado.push(
+      mesRows
+        .filter(r => r.tipo === 'emprestimo')
+        .reduce((s, r) => s + parseFloat(r.valor_com_juros || r.valor || 0), 0)
+    );
+
+    recebido.push(
+      mesRows
+        .filter(r => r.tipo === 'emprestimo' && r.status === 'recebido')
+        .reduce((s, r) => s + parseFloat(r.valor_com_juros || r.valor || 0), 0)
+    );
   }
 
   charts.meses = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: meses,
+      labels,
       datasets: [
         { label: 'Emprestado', data: emprestado, backgroundColor: '#ff9800' },
         { label: 'Recebido',   data: recebido,   backgroundColor: '#4caf50' }
